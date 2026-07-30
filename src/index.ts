@@ -4,7 +4,8 @@
  * Re-exports all capability modules. Consumers import from this file.
  *
  * ```
- * import { startScan, wrapPhase, queryInsights, promptPendingProposals }
+ * import { startScan, wrapPhase, queryInsights, promptPendingProposals,
+ *   recommendForLanguage }
  *   from "@avery/codex-security-evo";
  * ```
  */
@@ -90,5 +91,33 @@ export {
   promptPendingProposals,
 } from "./moss/cli.js";
 
-// Step Four — AEvo (will be added in Step Four)
+// Step Four — AEvo
+export type {
+  AevoConfigFingerprint,
+  AevoOutcomeRecord,
+  AevoState,
+  RepoTypeRecommendation,
+} from "./aevo/core.js";
+
+export {
+  AEVO_CONFIDENCE_THRESHOLD,
+  computeConfidence,
+} from "./aevo/core.js";
+
+export {
+  loadAevoState,
+  saveAevoState,
+  recordOutcome,
+  recordsForLanguage,
+} from "./aevo/state.js";
+
+export {
+  recommendForLanguage,
+  recommendAll,
+} from "./aevo/recommend.js";
+
+export {
+  promptRecommendation,
+} from "./aevo/cli.js";
+
 // Step Five — Manifest (will be added in Step Five)
