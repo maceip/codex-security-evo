@@ -5,7 +5,7 @@
  *
  * ```
  * import { startScan, wrapPhase, queryInsights, promptPendingProposals,
- *   recommendForLanguage }
+ *   recommendForLanguage, emitManifest }
  *   from "@avery/codex-security-evo";
  * ```
  */
@@ -24,4 +24,6 @@ export { AEVO_CONFIDENCE_THRESHOLD, computeConfidence, } from "./aevo/core.js";
 export { loadAevoState, saveAevoState, recordOutcome, recordsForLanguage, } from "./aevo/state.js";
 export { recommendForLanguage, recommendAll, } from "./aevo/recommend.js";
 export { promptRecommendation, } from "./aevo/cli.js";
-// Step Five — Manifest (will be added in Step Five)
+export { CAPABILITY_NAMES, } from "./manifest/core.js";
+export { writeManifest, loadManifest, loadAllManifests, } from "./manifest/writer.js";
+export { emitManifest, } from "./manifest/integration.js";

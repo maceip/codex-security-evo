@@ -5,7 +5,7 @@
  *
  * ```
  * import { startScan, wrapPhase, queryInsights, promptPendingProposals,
- *   recommendForLanguage }
+ *   recommendForLanguage, emitManifest }
  *   from "@avery/codex-security-evo";
  * ```
  */
@@ -120,4 +120,23 @@ export {
   promptRecommendation,
 } from "./aevo/cli.js";
 
-// Step Five — Manifest (will be added in Step Five)
+// Step Five — Manifest
+export type {
+  CapabilityRecord,
+  ConformanceManifest,
+  CapabilityName,
+} from "./manifest/core.js";
+
+export {
+  CAPABILITY_NAMES,
+} from "./manifest/core.js";
+
+export {
+  writeManifest,
+  loadManifest,
+  loadAllManifests,
+} from "./manifest/writer.js";
+
+export {
+  emitManifest,
+} from "./manifest/integration.js";
