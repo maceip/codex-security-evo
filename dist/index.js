@@ -4,7 +4,8 @@
  * Re-exports all capability modules. Consumers import from this file.
  *
  * ```
- * import { startScan, wrapPhase, queryInsights } from "@avery/codex-security-evo";
+ * import { startScan, wrapPhase, queryInsights, promptPendingProposals }
+ *   from "@avery/codex-security-evo";
  * ```
  */
 export { successEdge, failureEdge, } from "./dag/core.js";
@@ -14,6 +15,9 @@ export { buildCapsule, } from "./fot/core.js";
 export { depositInsight, retrieveInsights, deleteInsight, } from "./fot/store.js";
 export { queryInsights, printInsightHint, } from "./fot/retrieval.js";
 export { autoDeposit, } from "./fot/deposit.js";
-// Step Three — MOSS (will be added in Step Three)
+export { PROPOSAL_THRESHOLD, suggestionForFailureClass, } from "./moss/core.js";
+export { collectEvidence, groupCount, } from "./moss/evidence.js";
+export { loadPendingProposals, evaluateThreshold, recordDecision, } from "./moss/proposal.js";
+export { promptPendingProposals, } from "./moss/cli.js";
 // Step Four — AEvo (will be added in Step Four)
 // Step Five — Manifest (will be added in Step Five)
