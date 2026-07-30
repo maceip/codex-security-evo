@@ -1,0 +1,39 @@
+{
+  "name": "@avery/codex-security-evo",
+  "version": "0.0.1",
+  "description": "Four-paper capability extensions for codex-security",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": "^22.13.0 || ^24.0.0 || ^26.0.0"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./dag": {
+      "types": "./dist/dag/core.d.ts",
+      "import": "./dist/dag/core.js",
+      "default": "./dist/dag/core.js"
+    }
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc -p tsconfig.json",
+    "lint": "tsc --noEmit",
+    "test": "node --test dist/**/*.test.js"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.1",
+    "typescript": "^5.7.3"
+  }
+}
