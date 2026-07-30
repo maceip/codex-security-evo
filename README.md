@@ -1,6 +1,6 @@
 # Codex Security Evolution
 
-`@openai/codex-security-evo` build upon the excellent upstream release from OpenAI, into an agentic security execution framework, persistent memory substrate, and autonomous patch evolution system built for high-assurance codebases.
+`@openai/codex-security-evo` builds upon the excellent upstream release from OpenAI, into an agentic security execution framework, persistent memory substrate, and autonomous patch evolution system built for high-assurance codebases.
 
 ---
 
