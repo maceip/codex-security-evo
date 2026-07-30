@@ -6,7 +6,7 @@
  */
 
 import { type DagEdge, type Phase, type FailureClass, type PreviousFailures } from "./core.js";
-import { open } from "node:fs/promises";
+import { open, mkdir } from "node:fs/promises";
 import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { homedir } from "node:os";
@@ -38,6 +38,7 @@ export function repoFingerprint(repoPath: string): string {
  * Creates the file and parent dir if they don't exist.
  */
 export async function appendEdge(edge: DagEdge): Promise<void> {
+  await mkdir(DAG_DIR, { recursive: true });
   const path = dagFilePath();
   const fd = await open(path, "a"); // append mode
   try {

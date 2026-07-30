@@ -4,7 +4,7 @@
  * Path: `~/.codex-security/dag/` — one file per calendar date (ISO date prefix).
  * Each line is a single JSON object (DagEdge).
  */
-import { open } from "node:fs/promises";
+import { open, mkdir } from "node:fs/promises";
 import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { homedir } from "node:os";
@@ -30,6 +30,7 @@ export function repoFingerprint(repoPath) {
  * Creates the file and parent dir if they don't exist.
  */
 export async function appendEdge(edge) {
+    await mkdir(DAG_DIR, { recursive: true });
     const path = dagFilePath();
     const fd = await open(path, "a"); // append mode
     try {

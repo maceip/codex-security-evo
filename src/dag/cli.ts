@@ -24,44 +24,48 @@ import { homedir } from "node:os";
 const STATE_DIR = join(homedir(), ".codex-security");
 const SCAN_ID_PATH = join(STATE_DIR, "current-scan-id");
 
+export interface ScanContext {
+  scanId: string;
+  timestamp: string;
+  fingerprint: string;
+}
+
 /**
  * Start a new scan: generate a scan id and write it to a state file so that
  * all phase wrappers share the same scan id.
  */
-export async function startScan(repoPath: string): Promise<{ scanId: string; timestamp: string; fingerprint: string }> {
+export async function startScan(repoPath: string): Promise<ScanContext> {
   const scanId = randomUUID();
   const timestamp = new Date().toISOString();
   const fingerprint = repoFingerprint(repoPath);
 
-  // Ensure state directory exists.
   await writeFile(SCAN_ID_PATH, JSON.stringify({ scanId, timestamp, fingerprint }), "utf8");
 
   return { scanId, timestamp, fingerprint };
 }
 
 /**
- * Finish a scan: emit edges for any un-emitted phases and clean up the scan id.
+ * Read the current scan context from state. Returns null if no scan is active.
  */
-export async function finishScan(): Promise<void> {
-  // For now, just clean up.
-  // In a full implementation this would emit missing phases as failures.
+export async function readScanContext(): Promise<ScanContext | null> {
   try {
-    await writeFile(SCAN_ID_PATH, "", "utf8");
+    const raw = await readFile(SCAN_ID_PATH, "utf8");
+    if (!raw.trim()) return null;
+    return JSON.parse(raw) as ScanContext;
   } catch {
-    // ignore — file may not exist
+    return null;
   }
 }
 
 /**
- * Read the current scan id from state. Returns null if no scan is active.
+ * Finish a scan: clean up the scan id state file.
+ * Post-scan orchestration (FoT deposit, manifest) is handled by the CLI.
  */
-async function readScanId(): Promise<{ scanId: string; timestamp: string; fingerprint: string } | null> {
+export async function finishScan(): Promise<void> {
   try {
-    const raw = await readFile(SCAN_ID_PATH, "utf8");
-    if (!raw.trim()) return null;
-    return JSON.parse(raw) as { scanId: string; timestamp: string; fingerprint: string };
+    await writeFile(SCAN_ID_PATH, "", "utf8");
   } catch {
-    return null;
+    // ignore
   }
 }
 
@@ -76,7 +80,7 @@ export async function wrapPhase(
   phase: Phase,
   fn: () => Promise<PhaseOutcome>,
 ): Promise<PhaseOutcome> {
-  const scanState = await readScanId();
+  const scanState = await readScanContext();
   if (!scanState) {
     throw new Error(`No active scan. Call startScan() first.`);
   }

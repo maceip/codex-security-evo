@@ -22,27 +22,13 @@ export async function startScan(repoPath) {
     const scanId = randomUUID();
     const timestamp = new Date().toISOString();
     const fingerprint = repoFingerprint(repoPath);
-    // Ensure state directory exists.
     await writeFile(SCAN_ID_PATH, JSON.stringify({ scanId, timestamp, fingerprint }), "utf8");
     return { scanId, timestamp, fingerprint };
 }
 /**
- * Finish a scan: emit edges for any un-emitted phases and clean up the scan id.
+ * Read the current scan context from state. Returns null if no scan is active.
  */
-export async function finishScan() {
-    // For now, just clean up.
-    // In a full implementation this would emit missing phases as failures.
-    try {
-        await writeFile(SCAN_ID_PATH, "", "utf8");
-    }
-    catch {
-        // ignore — file may not exist
-    }
-}
-/**
- * Read the current scan id from state. Returns null if no scan is active.
- */
-async function readScanId() {
+export async function readScanContext() {
     try {
         const raw = await readFile(SCAN_ID_PATH, "utf8");
         if (!raw.trim())
@@ -54,6 +40,18 @@ async function readScanId() {
     }
 }
 /**
+ * Finish a scan: clean up the scan id state file.
+ * Post-scan orchestration (FoT deposit, manifest) is handled by the CLI.
+ */
+export async function finishScan() {
+    try {
+        await writeFile(SCAN_ID_PATH, "", "utf8");
+    }
+    catch {
+        // ignore
+    }
+}
+/**
  * Wrap a phase function: emit a success or failure edge, and on failure show
  * a hint with previous failure counts.
  *
@@ -61,7 +59,7 @@ async function readScanId() {
  * @param fn — the actual phase function (returns a PhaseOutcome)
  */
 export async function wrapPhase(phase, fn) {
-    const scanState = await readScanId();
+    const scanState = await readScanContext();
     if (!scanState) {
         throw new Error(`No active scan. Call startScan() first.`);
     }

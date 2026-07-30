@@ -9,6 +9,9 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "bin": {
+    "codex-security-evo": "./bin/codex-security-evo.mjs"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -23,6 +26,7 @@
   },
   "files": [
     "dist",
+    "bin",
     "LICENSE",
     "README.md"
   ],
@@ -35,5 +39,8 @@
   "devDependencies": {
     "@types/node": "^22.20.1",
     "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^8.3.0"
   }
 }

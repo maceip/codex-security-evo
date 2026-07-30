@@ -7,17 +7,23 @@
  * Also provides a query helper to show previous failures for a phase.
  */
 import { type Phase, type FailureClass, type PreviousFailures, type PhaseOutcome } from "./core.js";
+export interface ScanContext {
+    scanId: string;
+    timestamp: string;
+    fingerprint: string;
+}
 /**
  * Start a new scan: generate a scan id and write it to a state file so that
  * all phase wrappers share the same scan id.
  */
-export declare function startScan(repoPath: string): Promise<{
-    scanId: string;
-    timestamp: string;
-    fingerprint: string;
-}>;
+export declare function startScan(repoPath: string): Promise<ScanContext>;
 /**
- * Finish a scan: emit edges for any un-emitted phases and clean up the scan id.
+ * Read the current scan context from state. Returns null if no scan is active.
+ */
+export declare function readScanContext(): Promise<ScanContext | null>;
+/**
+ * Finish a scan: clean up the scan id state file.
+ * Post-scan orchestration (FoT deposit, manifest) is handled by the CLI.
  */
 export declare function finishScan(): Promise<void>;
 /**
